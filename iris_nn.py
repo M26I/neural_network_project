@@ -94,8 +94,8 @@ nn.evaluate(X_test, y_test_labels)
 
 
 # features to plot
-feature_x = 0  # sepal length
-feature_y = 2  # petal length
+feature_x = 0  
+feature_y = 2  
 
 # Predict on test data
 y_pred_labels = nn.predict(X_test)
