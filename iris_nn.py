@@ -89,8 +89,19 @@ print("X_train:", X_train.shape)
 print("y_train:", y_train.shape)
 nn.train(X_train, y_train, epochs=2000)
 
+
+
+
+
 # Evaluate
 nn.evaluate(X_test, y_test_labels)
+
+# Predict on test data
+y_pred_labels = nn.predict(X_test)
+
+# Save predictions for comparison
+np.save("scratch_predictions.npy", y_pred_labels)
+
 
 
 # features to plot

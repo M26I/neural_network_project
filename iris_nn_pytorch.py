@@ -70,3 +70,8 @@ with torch.no_grad():
     predicted_labels = torch.argmax(predictions, dim=1).numpy()
     accuracy = np.mean(predicted_labels == y_test_labels)
     print(f"Test Accuracy: {accuracy * 100:.2f}%")
+
+
+# Save PyTorch predictions
+np.save("pytorch_predictions.npy", predicted_labels)
+
