@@ -68,6 +68,10 @@ with torch.no_grad():
     accuracy = np.mean(predicted_labels == y_test_labels)
     print(f"Test Accuracy: {accuracy * 100:.2f}%")
 
+
+# Save the model
+torch.save(model.state_dict(), "torch_model.pth")
+
 # Save predictions
 np.save("pytorch_predictions.npy", predicted_labels)
 
