@@ -102,6 +102,20 @@ y_pred_labels = nn.predict(X_test)
 # Save predictions for comparison
 np.save("scratch_predictions.npy", y_pred_labels)
 
+# Get activations for test inputs
+activations = nn.relu(X_test @ nn.W1 + nn.b1)
+
+# Visualize activations for first 5 test samples
+plt.figure(figsize=(12, 5))
+for i in range(5):
+    plt.subplot(1, 5, i + 1)
+    plt.bar(range(activations.shape[1]), activations[i])
+    plt.title(f"Sample {i+1}\nLabel: {y_test_labels[i]}")
+    plt.xticks(range(activations.shape[1]), [f"H{i+1}" for i in range(activations.shape[1])])
+    plt.ylim(0, np.max(activations))  # consistent y-axis
+plt.suptitle("Hidden Layer Activations (Test Samples)")
+plt.tight_layout()
+plt.show()
 
 
 # features to plot
@@ -135,3 +149,16 @@ plt.legend()
 
 plt.tight_layout()
 plt.show()
+
+
+# Visualize weights of input → hidden layer
+plt.figure(figsize=(10, 4))
+for i in range(nn.W1.shape[1]):  # for each hidden neuron
+    plt.subplot(1, nn.W1.shape[1], i + 1)
+    plt.bar(range(nn.W1.shape[0]), nn.W1[:, i])
+    plt.xticks(range(nn.W1.shape[0]), iris.feature_names, rotation=45)
+    plt.title(f"Neuron {i+1}")
+    plt.tight_layout()
+plt.suptitle("Input → Hidden Layer Weights")
+plt.show()
+
