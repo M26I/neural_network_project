@@ -11,25 +11,20 @@ iris = load_iris()
 X = iris.data
 y = iris.target.reshape(-1, 1)
 
-# Normalize features
 scaler = StandardScaler()
 X = scaler.fit_transform(X)
 
-# One-hot encode labels
 encoder = OneHotEncoder(sparse_output=False)
 y_encoded = encoder.fit_transform(y)
 
-# Train-test split
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
 
-# Convert to PyTorch tensors
 X_train_tensor = torch.tensor(X_train, dtype=torch.float32)
 y_train_tensor = torch.tensor(y_train, dtype=torch.float32)
 X_test_tensor = torch.tensor(X_test, dtype=torch.float32)
 y_test_tensor = torch.tensor(y_test, dtype=torch.float32)
 y_test_labels = np.argmax(y_test, axis=1)
 
-# Define model
 class IrisNet(nn.Module):
     def __init__(self):
         super(IrisNet, self).__init__()
@@ -44,13 +39,13 @@ class IrisNet(nn.Module):
         return x
 
 model = IrisNet()
-
-# Loss and optimizer
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(model.parameters(), lr=0.05)
 
-# Convert labels for loss (not one-hot for CrossEntropyLoss)
 y_train_labels = torch.tensor(np.argmax(y_train, axis=1), dtype=torch.long)
+
+# Track loss
+loss_history = []
 
 # Train loop
 for epoch in range(1, 2001):
@@ -60,6 +55,8 @@ for epoch in range(1, 2001):
     optimizer.zero_grad()
     loss.backward()
     optimizer.step()
+
+    loss_history.append(loss.item()) 
 
     if epoch % 100 == 0:
         print(f"Epoch {epoch}, Loss: {loss.item():.4f}")
@@ -71,9 +68,8 @@ with torch.no_grad():
     accuracy = np.mean(predicted_labels == y_test_labels)
     print(f"Test Accuracy: {accuracy * 100:.2f}%")
 
-
-# Save PyTorch predictions
+# Save predictions
 np.save("pytorch_predictions.npy", predicted_labels)
 
-
-
+# Save loss history
+np.save("loss_pytorch.npy", loss_history)

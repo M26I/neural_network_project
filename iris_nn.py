@@ -12,6 +12,7 @@ class NeuralNetwork:
         self.W2 = np.random.randn(hidden_size, output_size) * np.sqrt(2. / hidden_size)
         self.b2 = np.zeros((1, output_size))
         self.learning_rate = learning_rate
+        self.loss_history = []
 
     def relu(self, x):
         return np.maximum(0, x)
@@ -48,14 +49,18 @@ class NeuralNetwork:
         self.b2 -= self.learning_rate * db2
         self.W1 -= self.learning_rate * dW1
         self.b1 -= self.learning_rate * db1
+        
+
 
     def train(self, X, y, epochs=1000):
-        for epoch in range(1, epochs + 1):
-            y_pred = self.forward(X)
-            loss = self.compute_loss(y_pred, y)
-            self.backward(X, y)
-            if epoch % 100 == 0:
-                print(f"Epoch {epoch}, Loss: {loss:.4f}")
+     for epoch in range(1, epochs + 1):
+        y_pred = self.forward(X)
+        loss = self.compute_loss(y_pred, y)
+        self.loss_history.append(loss)  
+        self.backward(X, y)
+        if epoch % 100 == 0:
+            print(f"Epoch {epoch}, Loss: {loss:.4f}")
+
 
     def predict(self, X):
         probs = self.forward(X)
@@ -79,6 +84,9 @@ X = (X - X.mean(axis=0)) / X.std(axis=0)
 encoder = OneHotEncoder(sparse_output=False)
 y_encoded = encoder.fit_transform(y)
 
+
+
+
 # Train/test split
 X_train, X_test, y_train, y_test = train_test_split(X, y_encoded, test_size=0.2, random_state=42)
 y_test_labels = np.argmax(y_test, axis=1)
@@ -101,6 +109,10 @@ y_pred_labels = nn.predict(X_test)
 
 # Save predictions for comparison
 np.save("scratch_predictions.npy", y_pred_labels)
+
+# Save manual model loss curve
+np.save("loss_manual.npy", nn.loss_history)
+
 
 # Get activations for test inputs
 activations = nn.relu(X_test @ nn.W1 + nn.b1)
