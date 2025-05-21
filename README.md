@@ -143,3 +143,6 @@ jupyter notebook Iris Neural Network From Scratch to PyTorch.ipynb
 ## 👤 Author
 
 [M26I](https://github.com/M26I)
+---
+© 2025 M26I – For educational/portfolio use only.  
+Unauthorized use or redistribution without credit is prohibited.

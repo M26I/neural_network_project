@@ -1,3 +1,5 @@
+# © 2025 M26I - For educational/portfolio use only
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
